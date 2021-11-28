@@ -3,8 +3,12 @@ package main
 import (
 	"todo-layered/config"
 
-	_todoController "todo-layered/delivery/controllers/todo"
+	_authRepo "todo-layered/repository/auth"
 	_todoRepo "todo-layered/repository/todo"
+
+	_authController "todo-layered/delivery/controllers/auth"
+	_todoController "todo-layered/delivery/controllers/todo"
+
 	"todo-layered/util"
 
 	"todo-layered/delivery/router"
@@ -24,15 +28,17 @@ func main() {
 
 	//initiate user model
 	todoRepo := _todoRepo.New(db)
+	authRepo := _authRepo.New()
 
 	//initiate user controller
 	todoController := _todoController.New(todoRepo)
+	authController := _authController.New(authRepo)
 
 	//create echo http
 	e := echo.New()
 
 	//register API path and controller
-	router.RegisterPath(e, todoController)
+	router.RegisterPath(e, todoController, authController)
 
 	// run server
 	address := fmt.Sprintf("localhost:%d", config.Port)

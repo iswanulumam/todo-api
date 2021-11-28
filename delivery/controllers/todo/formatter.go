@@ -1,5 +1,5 @@
 package todo
 
-type todoRequest struct {
+type TodoRequestFormat struct {
 	Title string `json:"title" form:"title"`
 }

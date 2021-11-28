@@ -30,14 +30,14 @@ func (tc TodoController) Get(c echo.Context) error {
 }
 
 func (tc TodoController) Create(c echo.Context) error {
-	var todoReq todoRequest
+	var todoRequest TodoRequestFormat
 
-	if err := c.Bind(&todoReq); err != nil {
+	if err := c.Bind(&todoRequest); err != nil {
 		return c.JSON(http.StatusBadRequest, common.BadRequest())
 	}
 
 	todo := entities.Todo{
-		Title: todoReq.Title,
+		Title: todoRequest.Title,
 	}
 
 	_, err := tc.repository.Create(todo)
