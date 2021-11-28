@@ -70,13 +70,14 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("TestCreate", func(t *testing.T) {
-		localToken := globalToken
 		e := echo.New()
 		requestBody, _ := json.Marshal(map[string]string{
 			"title": "eat lah",
 		})
 		req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(requestBody))
 		res := httptest.NewRecorder()
+
+		localToken := globalToken
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set(echo.HeaderAuthorization, fmt.Sprintf("Bearer %v", localToken))
 		context := e.NewContext(req, res)
