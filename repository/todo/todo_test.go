@@ -13,7 +13,7 @@ var (
 	todoTitle = "Eat banana"
 )
 
-func TestMain(t *testing.T) {
+func TestSetup(t *testing.T) {
 	//load config if available or set to default
 	config := config.GetConfig()
 
