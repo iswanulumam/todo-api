@@ -38,6 +38,14 @@ func BadRequest() DefaultResponse {
 	}
 }
 
+//ForbiddedRequest default not found error response
+func ForbiddedRequest() DefaultResponse {
+	return DefaultResponse{
+		403,
+		"Forbidded Request",
+	}
+}
+
 //NewConflictResponse default not found error response
 func Conflict() DefaultResponse {
 	return DefaultResponse{

@@ -18,23 +18,24 @@ func New(auth authRepo.Auth) *AuthController {
 	}
 }
 
-func (a AuthController) Login(c echo.Context) error {
-	var loginRequest LoginRequestFormat
+func (a AuthController) Login() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var loginRequest LoginRequestFormat
 
-	if err := c.Bind(&loginRequest); err != nil {
-		return c.JSON(http.StatusBadRequest, common.BadRequest())
+		if err := c.Bind(&loginRequest); err != nil {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
+		}
+
+		token, err := a.repository.Login(loginRequest.Username, loginRequest.Password)
+
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, common.BadRequest())
+		}
+
+		loginResponse := LoginResponseFormat{
+			Token: token,
+		}
+
+		return c.JSON(http.StatusOK, loginResponse)
 	}
-
-	token, err := a.repository.Login(loginRequest.Username, loginRequest.Password)
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, common.BadRequest())
-	}
-
-	loginResponse := LoginResponseFormat{
-		Token: token,
-	}
-
-	return c.JSON(http.StatusOK, loginResponse)
-
 }

@@ -14,9 +14,9 @@ func RegisterPath(
 	authController *auth.AuthController) {
 
 	// Login
-	e.POST("/login", authController.Login)
+	e.POST("/login", authController.Login())
 
 	// Todo
-	e.GET("/todo", todoController.Get)
-	e.POST("/todo", todoController.Create, middleware.JWTMiddleware())
+	e.GET("/todo", todoController.Get())
+	e.POST("/todo", todoController.Create(), middleware.JWTMiddleware())
 }
