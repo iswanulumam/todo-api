@@ -15,6 +15,7 @@ import (
 
 	"todo-layered/delivery/controllers/auth"
 	_authController "todo-layered/delivery/controllers/auth"
+	_middleware "todo-layered/delivery/middleware"
 	_authRepository "todo-layered/repository/auth"
 )
 
@@ -39,10 +40,10 @@ func TestGet(t *testing.T) {
 
 func TestCreate(t *testing.T) {
 
-	var (
-		// for other operation
-		globalToken = ""
-	)
+	// var (
+	// 	// for other operation
+	// 	globalToken = ""
+	// )
 
 	t.Run("TestLogin", func(t *testing.T) {
 		e := echo.New()
@@ -64,8 +65,8 @@ func TestCreate(t *testing.T) {
 		var response auth.LoginResponseFormat
 		json.Unmarshal([]byte(res.Body.String()), &response)
 
-		globalToken = response.Token
-		assert.Equal(t, len(response.Token), 159)
+		// globalToken = response.Token
+		assert.Equal(t, 159, len(response.Token))
 
 	})
 
@@ -77,7 +78,9 @@ func TestCreate(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(requestBody))
 		res := httptest.NewRecorder()
 
-		localToken := globalToken
+		// localToken := globalToken
+		localToken, _ := _middleware.CreateToken(1, "admin")
+		fmt.Println("token", localToken)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set(echo.HeaderAuthorization, fmt.Sprintf("Bearer %v", localToken))
 		context := e.NewContext(req, res)
@@ -89,7 +92,8 @@ func TestCreate(t *testing.T) {
 
 		var response entities.Todo
 		json.Unmarshal([]byte(res.Body.String()), &response)
-		assert.Equal(t, response.Title, "Eat Blueberry")
+		fmt.Println("title", response.Title)
+		assert.Equal(t, "Eat Blueberry", response.Title)
 	})
 }
 
